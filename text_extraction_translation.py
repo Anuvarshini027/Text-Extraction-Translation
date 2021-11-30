@@ -16,7 +16,7 @@ def midpoint(x1, y1, x2, y2):
     return (x_mid, y_mid)
 
 
-def inpaint_easyocr(img):
+def inpaint_easyocr(img,reader):
     img_copy = img.copy()
     plt.imshow(img)
     plt.show()
@@ -263,11 +263,11 @@ if file is not None:
     tokenizer_mBart = MBart50TokenizerFast.from_pretrained(
         "facebook/mbart-large-50-many-to-many-mmt")
 
-   
+    lang=dict_language[option]
 
-    reader = easyocr.Reader([option], gpu=False)
+    reader = easyocr.Reader([lang], gpu=False)
     img_1 = cv2.imread(file)
-    inpainted, rect, text, result = inpaint_easyocr(img_1)
+    inpainted, rect, text, result = inpaint_easyocr(img_1,reader)
     
     st.write(f"The detected text is: {text}")
     st.subheader('Inpainted Image')
@@ -279,15 +279,16 @@ if file is not None:
                                  tuple(target_lang.keys()))
 
     st.write('Your selected target language is :', target_option)
-
+    src= target_lang[option]
+    tgt=target_lang[target_option]
+    
     text_formatted = preprocessing(text)
 
-    tokenizer_mBart.src_lang = option
+    tokenizer_mBart.src_lang = src
     encoded_mBart = tokenizer_mBart(text_formatted, return_tensors="pt")
     generated_tokens = model_mBart.generate(**encoded_mBart,
                                             forced_bos_token_id=
-                                            tokenizer_mBart.lang_code_to_id[
-                                                target_option])
+                                            tokenizer_mBart.lang_code_to_id[tgt])
     translated_text = tokenizer_mBart.batch_decode(generated_tokens,
                                                    skip_special_tokens=True)
     translated_text_str = " ".join(translated_text)
