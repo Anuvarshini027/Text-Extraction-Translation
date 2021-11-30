@@ -7,5 +7,4 @@ pillow>=6.2.0
 sentencepiece
 regex
 streamlit
-math
 numpy
