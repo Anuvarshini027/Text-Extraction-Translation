@@ -16,8 +16,7 @@ def midpoint(x1, y1, x2, y2):
     return (x_mid, y_mid)
 
 
-def inpaint_easyocr(img_path):
-    img = cv2.imread(img_path)
+def inpaint_easyocr(img):
     img_copy = img.copy()
     plt.imshow(img)
     plt.show()
@@ -267,7 +266,8 @@ if file is not None:
    
 
     reader = easyocr.Reader([option], gpu=False)
-    inpainted, rect, text, result = inpaint_easyocr(upload_path)
+    img_1 = cv2.imread(file)
+    inpainted, rect, text, result = inpaint_easyocr(img_1)
     
     st.write(f"The detected text is: {text}")
     st.subheader('Inpainted Image')
