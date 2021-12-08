@@ -13,15 +13,6 @@ import string
 import time
 #torchvision==0.11.1 ipython==7.8.0 torch==1.10.0
 # creating a side bar 
-st.sidebar.info("Created By : Anuvarshini S P")
-# Adding an image to the side bar 
-st.sidebar.subheader("Contact Information : ")
-
-col1, mid, col2 = st.sidebar.columns([1,1,20])
-with col1:
-	st.sidebar.subheader("Github : ")
-with col2:
-	st.sidebar.markdown("[![Github](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJGtP-Pq0P67Ptyv3tB7Zn2ZYPIT-lPGI7AA&usqp=CAU)](https://github.com/Anuvarshini027)")
 
 def midpoint(x1, y1, x2, y2):
     x_mid = int((x1 + x2) / 2)
