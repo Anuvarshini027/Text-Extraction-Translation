@@ -4,12 +4,12 @@ from transformers import MarianMTModel, MarianTokenizer
 import cv2
 import math
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import streamlit as st
 import re
 import string
 import time
-
+#torchvision==0.11.1 ipython==7.8.0 torch==1.10.0
 
 def midpoint(x1, y1, x2, y2):
     x_mid = int((x1 + x2) / 2)
@@ -19,8 +19,8 @@ def midpoint(x1, y1, x2, y2):
 
 def inpaint_easyocr(img,reader):
     img_copy = img.copy()
-    plt.imshow(img)
-    plt.show()
+    #plt.imshow(img)
+    #plt.show()
     result = reader.readtext(img)
     text = [result[i][1] for i in range(len(result))]
     # text=' '.join(map(str,text))
@@ -183,7 +183,8 @@ if file is not None:
     reader = easyocr.Reader([lang], gpu=False)
     img_1 = cv2.imread(file)
     inpainted, rect, text, result = inpaint_easyocr(img_1,reader)
-    
+    st.write("Uploaded Image")
+    st.image(img_1)
     #st.write(f"The detected text is: {text}")
     st.subheader('Inpainted Image')
     st.image(inpainted)
@@ -214,36 +215,36 @@ if file is not None:
         fontpath="times-new-roman.ttf"
         f=shape(inpainted)
         trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,f)
-        plt.imshow(trans_img_lang) 
+         st.image(trans_img_lang) 
 
     lang_list= ["Japanese","Korean","Chinese" ,"Thai" ,"Arabic" ,"Portuguese" ,"Turkish","Vietnamese","Russian","Hindi","Italian","Spanish","Indonesian","French","German"]
     if tgt_input in lang_list :
         fontpath = "arial-unicode-ms.ttf"
         f=shape(inpainted)
         trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,f)
-        plt.imshow(trans_img_lang) 
+        st.image(trans_img_lang) 
 
     if tgt_input ==  "Urdu":
         fontpath = "urdu.ttf"
         f=shape(inpainted)
         trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,f)
-        plt.imshow(trans_img_lang) 
+        st.image(trans_img_lang) 
 
 
     if tgt_input ==  "Dutch":
         fontpath = "Dutch Regular.ttf"
         f=shape(inpainted)
         trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,f)
-        plt.imshow(trans_img_lang) 
+        st.image(trans_img_lang) 
 
     if tgt_input ==  "Swedish":
         fontpath = "Swedish.ttf"
         f=shape(inpainted)
         trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,f)
-        plt.imshow(trans_img_lang) 
+        st.image(trans_img_lang) 
 
     if tgt_input ==  "Slovenian":
         fontpath = "Slovenia.ttf"
         f=shape(inpainted)
         trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,f)
-        plt.imshow(trans_img_lang) 
+        st.image(trans_img_lang) 
