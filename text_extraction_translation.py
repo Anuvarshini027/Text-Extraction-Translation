@@ -180,9 +180,12 @@ if file is not None:
     st.write('You selected:', option)
   
     lang=dict_language[option]
-    reader = easyocr.Reader([lang], gpu=False)
+    st.write(lang)
+    
+    reader = easyocr.Reader([lang])
     img_1 = cv2.imread(file)
     inpainted, rect, text, result = inpaint_easyocr(img_1,reader)
+    
     st.write("Uploaded Image")
     st.image(img_1)
     #st.write(f"The detected text is: {text}")
