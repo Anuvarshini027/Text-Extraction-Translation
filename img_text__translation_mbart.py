@@ -161,9 +161,9 @@ def shape(inpainted):
 
 st.subheader("Please Wait. Loading...")
 model_mBart = MBartForConditionalGeneration.from_pretrained(
-        "facebook/mbart-large-50-many-to-many-mmt")
+        "facebook/mbart-large-50-many-to-many-mmt",gradient_checkpointing=True)
 tokenizer_mBart = MBart50TokenizerFast.from_pretrained(
-        "facebook/mbart-large-50-many-to-many-mmt")
+        "facebook/mbart-large-50-many-to-many-mmt",gradient_checkpointing=True)
 
 st.subheader('Upload any image which needs to be translated')
 
