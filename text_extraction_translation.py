@@ -215,7 +215,7 @@ if file is not None:
         fontpath="times-new-roman.ttf"
         f=shape(inpainted)
         trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,f)
-         st.image(trans_img_lang) 
+        st.image(trans_img_lang) 
 
     lang_list= ["Japanese","Korean","Chinese" ,"Thai" ,"Arabic" ,"Portuguese" ,"Turkish","Vietnamese","Russian","Hindi","Italian","Spanish","Indonesian","French","German"]
     if tgt_input in lang_list :
