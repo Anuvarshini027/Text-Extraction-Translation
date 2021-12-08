@@ -12,8 +12,6 @@ NOTE:Make sure that .ttf files and .py file belongs to the same directory
 ```
 streamlit run img_text_translation_mbart.py
 ```
-## Streamlit web app implementation of the project. 
-
 ## Pre-requisites :
 
 Make sure to install streamlit if haven't already, to install streamlit use the following command :
@@ -23,13 +21,7 @@ pip install streamlit
 ```
 All the package requirements have been mentioned in the requirements.txt file. 
 
-## Using Anaconda Prompt:
 
-To run the app in anaconda prompt, go to the location where the App_Higgs_Boson.py file is using the cd command and then run the following line:
-
-```
-streamlit run img_text_translation_mbart.py
-```
 ## Step-by-Step Approach:
 
  -Text Extraction from Image using easyocr<br>
