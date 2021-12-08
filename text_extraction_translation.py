@@ -180,9 +180,9 @@ if file is not None:
     st.write('You selected:', option)
   
     lang=dict_language[option]
-    st.write(lang)
+   
     
-    reader = easyocr.Reader([lang])
+    reader = easyocr.Reader([lang],gpu=True)
     img_1 = cv2.imread(file)
     inpainted, rect, text, result = inpaint_easyocr(img_1,reader)
     
