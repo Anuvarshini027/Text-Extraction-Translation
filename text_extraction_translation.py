@@ -1,14 +1,15 @@
-
-from transformers import MBartForConditionalGeneration, MBart50TokenizerFast
+import easyocr
 from PIL import ImageFont, ImageDraw, Image
+from transformers import MarianMTModel, MarianTokenizer
 import cv2
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-import easyocr
 import streamlit as st
 import re
 import string
+import time
+
 
 def midpoint(x1, y1, x2, y2):
     x_mid = int((x1 + x2) / 2)
@@ -144,202 +145,105 @@ def translated_img_other_lang(inpaint_img, result, fontpath,
     img2 = np.array(img_pil)
 
     return (img2)
+    
+def shape(inpainted):
+   if (inpainted.shape[0]) <=400:
+       fontsize=25
+   elif  (inpainted.shape[0]) >400 and  (inpainted.shape[0]) <=600:
+       fontsize=40
+   elif  (inpainted.shape[0]) >600 and  (inpainted.shape[0]) <=1000:
+       fontsize=60
+   elif (inpainted.shape[0]) >1000:
+       fontsize=100
+   return fontsize
+   
 
+st.subheader("Please Wait. Loading...")
 
-
-st.subheader('Upload any image which needs to be translated')
+st.subheader('Upload an image which needs to be translated')
 
 # if the user chooses to upload the data
 file = st.file_uploader('Image file')
-# browsing and uploading the dataset (strictly in csv format)
-# dataset = pd.DataFrame()
+dict_language={"English":"en","Korean":"ko","French":"fr","Spanish":"es","Latin":"la","Italian":"it","Romanian":"ro","Indonesian":"id","Portuguese":"pt","Japanese":"ja","Hindi":"hi",
+               "Turkish":"tr",'German': 'de','Ukrainian':'uk',"Chinese":"ch_sim","Occitan":"oc","Swedish":"sv","Arabic":"ar","Dutch":"nl","Marathi":"mr",
+               "Maltese":"mt","Polish":"pl","Russian":"ru","Slovenian":"sl","Thai":"th","Urdu":"ur","Vietnamese":"vi"}
+target_lang={"English":"en","Hindi":"hi","Korean":"ko","Turkish":"tr","French":"fr","Spanish":"es","Portuguese":"pt","Italian":"it",
+                  "Romanian":"ro","Indonesian":"id",
+                  "Japanese":"ja","Swedish":"sv","Chinese":"zh",'Ukrainian':'uk','German': 'de','Arabic':'ar',"Dutch":"nl",
+                  "Russian":"ru","Slovenian":"sl","Thai":"th","Urdu":"ur","Vietnamese":"vi"}
 
-
-dict_language = {
-    "Tamil": "ta",
-    "Telugu": "te",
-    "Chinese": "ch_sim",
-    # "TChinese":"ch_tra",
-    "Japanese": "ja",
-    "Vietnamese": "vi",
-    "Lithuanian": "lt",
-    "French": "fr",
-    "Thai": "th",
-    "Czech": "cs",
-    "Bengali": "bn",
-    "Spanish": "es",
-    "Russian": "ru",
-    'Urdu': 'ur',
-    'Latvian': 'lv',
-    'Latin': 'la',
-    'Italian': 'it',
-    'Swahili': 'sw',
-    'Ukrainian': 'uk',
-    'Korean': 'ko',
-    'English': 'en',
-    'Romanian': 'ro',
-    'Nepali': 'ne',
-    'Indonesian': 'id',
-    'Marathi': 'mr',
-    'Arabic': 'ar',
-    'Hindi': 'hi',
-    'German': 'de',
-    'Persian': 'fa',
-    'Estonian': 'et',
-    'Polish': 'pl',
-    'Sweden': 'sv',
-    'Norwegian': 'no',
-    "Portuguese": "pt",
-    "Turkish": "tr",
-    "Afrikaans": "af",
-    "Dutch": "nl",
-    "Tagalog": "tl",
-    "Slovenian": "sl"
-
-}
-
-target_lang = {
-    "Tamil": "ta_IN",
-    "Telugu": "te_IN",
-    "Arabic": "ar_AR",
-    "Czech": "cs_CZ",
-    "German": "de_DE",
-    "English": "en_XX",
-    "Spanish": "es_XX",
-    "Estonian": "et_EE",
-    "Finnish": "fi_FI",
-    "French": "fr_XX",
-    "Gujarati": "gu_IN",
-    "Hindi": "hi_IN",
-    "Italian": "it_IT",
-    "Japanese": "ja_XX",
-    "Kazakh": "kk_KZ",
-    "Korean": "ko_KR",
-    "Lithuanian": "lt_LT",
-    "Latvian": "lv_LV",
-    "Burmese": "my_MM",
-    "Nepali": "ne_NP",
-    "Dutch": "nl_XX",
-    "Romanian": "ro_RO",
-    "Russian": "ru_RU",
-    "Sinhala": "si_LK",
-    "Turkish": "tr_TR",
-    "Vietnamese": "vi_VN",
-    "Chinese": "zh_CN",
-    "Afrikaans": "af_ZA",
-    "Azerbaijani": "az_AZ",
-    "Bengali": "bn_IN",
-    "Persian": "fa_IR",
-    "Hebrew": "he_IL",
-    "Croatian": "hr_HR",
-    "Indonesian": "id_ID",
-    "Georgian": "ka_GE",
-    "Khmer": "km_KH",
-    "Macedonian": "mk_MK",
-    "Malayalam": "ml_IN",
-    "Mongolian": "mn_MN",
-    "Marathi": "mr_IN",
-    "Polish": "pl_PL",
-    "Pashto": "ps_AF",
-    "Portuguese": "pt_XX",
-    "Swedish": "sv_SE",
-    "Swahili": "sw_KE",
-    "Thai": "th_TH",
-    "Tagalog": "tl_XX",
-    "Ukrainian": "uk_UA",
-    "Urdu": "ur_PK",
-    "Xhosa": "xh_ZA",
-    "Galician": "gl_ES",
-    "Slovene": "sl_SI"
-}
 
 if file is not None:
     option = st.selectbox('Select the source language',
                           tuple(dict_language.keys()))
-
+    time.sleep(10)
     st.write('You selected:', option)
-    model_mBart = MBartForConditionalGeneration.from_pretrained(
-        "facebook/mbart-large-50-many-to-many-mmt")
-    tokenizer_mBart = MBart50TokenizerFast.from_pretrained(
-        "facebook/mbart-large-50-many-to-many-mmt")
-
+  
     lang=dict_language[option]
-
     reader = easyocr.Reader([lang], gpu=False)
     img_1 = cv2.imread(file)
     inpainted, rect, text, result = inpaint_easyocr(img_1,reader)
     
-    st.write(f"The detected text is: {text}")
+    #st.write(f"The detected text is: {text}")
     st.subheader('Inpainted Image')
     st.image(inpainted)
     #st.image(plt.show())
     st.image(rect)
-
-    target_option = st.selectbox('Select the Target language',
+    text1 = preprocessing(text)
+    st.write(f"The detected text is: {text1}")
+    st.info("Note:There are few combinations that the model can't convert.(Ex:french to korean and many more).In such cases, it throws an error")
+    tgt_input = st.selectbox('Select the Target language',
                                  tuple(target_lang.keys()))
-
-    st.write('Your selected target language is :', target_option)
-    src= target_lang[option]
-    tgt=target_lang[target_option]
+    time.sleep(10)
+    st.write('Your selected target language is :', tgt_input)
     
-    text_formatted = preprocessing(text)
-
-    tokenizer_mBart.src_lang = src
-    encoded_mBart = tokenizer_mBart(text_formatted, return_tensors="pt")
-    generated_tokens = model_mBart.generate(**encoded_mBart,
-                                            forced_bos_token_id=
-                                            tokenizer_mBart.lang_code_to_id[tgt])
-    translated_text = tokenizer_mBart.batch_decode(generated_tokens,
-                                                   skip_special_tokens=True)
-    translated_text_str = " ".join(translated_text)
+    src=dict_language[option]
+    tgt=target_lang[tgt_input]
+    
+    model_name = f'Helsinki-NLP/opus-mt-{src}-{tgt}' 
+    tokenizer = MarianTokenizer.from_pretrained(model_name)
+    model = MarianMTModel.from_pretrained(model_name)
+    translated = model.generate(**tokenizer(text1, return_tensors="pt", padding=True))
+    trans_text=[tokenizer.decode(t,skip_special_tokens=True) for t in translated]
+    translated_text_str=' '.join(trans_text)
+      
+    st.write(f"Translated Text to {tgt_input} language" )
     st.write(translated_text_str)
 
-    if tgt =='en_XX':
+    if tgt_input =='English':
         fontpath="times-new-roman.ttf"
-        trans_img=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,15)
-        st.image(trans_img_lang)
+        f=shape(inpainted)
+        trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,f)
+        plt.imshow(trans_img_lang) 
 
-    if tgt ==  "si_LK" :
-        fontpath = "Akshar Unicode.ttf"
-        if (inpainted.shape[0]) <=400:
-            trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,25)
-       
-        elif (inpainted.shape[0]) >1000:
-            trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,100)
-         
-        elif  (inpainted.shape[0]) >400 and  (inpainted.shape[0]) <=600:
-            trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,40)
-            
-        st.image(trans_img_lang)
-
-    if tgt == "de_DE":
-        fontpath = "German.ttf"
-        trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,20)
-        st.image(trans_img_lang)
-
-
-    if tgt == "es_XX":
-        fontpath = "spanish.ttf"
-        trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,0.02)
-        #plt.rcParams["figure.figsize"] = (16,16)
-        st.image(trans_img_lang) 
-
-
-    if tgt ==  "fr_XX":
-        fontpath = "French.ttf"
-        trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,20)
-        st.image(trans_img_lang) 
-
-    lang_list= ["ja_XX","ko_KR","zh_CN" ,"th_TH" ,"ar_AR" ,"pt_XX" ,"tr_TR","vi_VN","ru_RU","ka_GE","gu_IN","bn_IN" ,"ta_IN", "te_IN" ,"ml_IN" ,"hi_IN"]
-    if tgt in lang_list :
+    lang_list= ["Japanese","Korean","Chinese" ,"Thai" ,"Arabic" ,"Portuguese" ,"Turkish","Vietnamese","Russian","Hindi","Italian","Spanish","Indonesian","French","German"]
+    if tgt_input in lang_list :
         fontpath = "arial-unicode-ms.ttf"
-        if (inpainted.shape[0]) <=400:
-            trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,25)
-          
-        elif (inpainted.shape[0]) >1000:
-            trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,100)
-          
-        elif  (inpainted.shape[0]) >400 and  (inpainted.shape[0]) <=600:
-            trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,40)
-        st.image(trans_img_lang)
-    
+        f=shape(inpainted)
+        trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,f)
+        plt.imshow(trans_img_lang) 
+
+    if tgt_input ==  "Urdu":
+        fontpath = "urdu.ttf"
+        f=shape(inpainted)
+        trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,f)
+        plt.imshow(trans_img_lang) 
+
+
+    if tgt_input ==  "Dutch":
+        fontpath = "Dutch Regular.ttf"
+        f=shape(inpainted)
+        trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,f)
+        plt.imshow(trans_img_lang) 
+
+    if tgt_input ==  "Swedish":
+        fontpath = "Swedish.ttf"
+        f=shape(inpainted)
+        trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,f)
+        plt.imshow(trans_img_lang) 
+
+    if tgt_input ==  "Slovenian":
+        fontpath = "Slovenia.ttf"
+        f=shape(inpainted)
+        trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,f)
+        plt.imshow(trans_img_lang) 
