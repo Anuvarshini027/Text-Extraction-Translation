@@ -2,6 +2,7 @@
 
 This app has been deployed on streamlit. To view the app check the link below <br>
 https://share.streamlit.io/anuvarshini027/text-extraction-translation/main/text_extraction_translation.py
+The corresponding .py file is text_t
 
 ## Streamlit web app implementation of the project. 
 
