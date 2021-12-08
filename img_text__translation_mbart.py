@@ -1,6 +1,8 @@
 
 import streamlit as st
 st.title("Image Text Extraction and Translation")
+import warnings
+warnings.filterwarnings("ignore") 
 import easyocr
 from PIL import ImageFont, ImageDraw, Image
 from transformers import MBartForConditionalGeneration, MBart50TokenizerFast
