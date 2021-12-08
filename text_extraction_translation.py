@@ -186,6 +186,9 @@ target_lang={"English":"en","Hindi":"hi","Korean":"ko","Turkish":"tr","French":"
                   "Japanese":"ja","Swedish":"sv","Chinese":"zh",'Ukrainian':'uk','German': 'de','Arabic':'ar',"Dutch":"nl",
                   "Russian":"ru","Slovenian":"sl","Thai":"th","Urdu":"ur","Vietnamese":"vi"}
 
+st.subheader("Following are the languages you can translate to:")
+st.info(dict_language.keys())
+
 
 if file is not None:
     my_img = Image.open(file)
