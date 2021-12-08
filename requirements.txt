@@ -1,12 +1,9 @@
 torch==1.10.0
-torchvision==0.11.1
 transformers==4.11.0
-matplotlib==3.1.1
 sentencepiece
+mosestokenizer
 regex
 streamlit==0.82.0
-numpy==1.19.5
-matplotlib==3.1.1
 opencv-python-headless==4.5.2.54
 easyocr==1.4.1
 ipython==7.8.0
