@@ -67,7 +67,7 @@ def wrap_text(text, font, max_width):
             # append every word to a line while its width is shorter than the image width
         while i < len(words):
             line = ''
-            while (i < len(words) and font.getsize(line + words[i])[0] <= max_width)):
+            while (i < len(words) and font.getsize(line + words[i])[0] <= max_width):
                 line = line + words[i] + " "
                 i += 1
             if not line:
