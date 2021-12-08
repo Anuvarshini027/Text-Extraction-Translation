@@ -1,5 +1,5 @@
 import streamlit as st
-st.write("Importing...")
+st.title("Image Text Extraction and Translation")
 import easyocr
 from PIL import ImageFont, ImageDraw, Image
 from transformers import MarianMTModel, MarianTokenizer
@@ -12,6 +12,16 @@ import re
 import string
 import time
 #torchvision==0.11.1 ipython==7.8.0 torch==1.10.0
+# creating a side bar 
+st.sidebar.info("Created By : Anuvarshini S P")
+# Adding an image to the side bar 
+st.sidebar.subheader("Contact Information : ")
+
+col1, mid, col2 = st.sidebar.columns([1,1,20])
+with col1:
+	st.sidebar.subheader("Github : ")
+with col2:
+	st.sidebar.markdown("[![Github](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJGtP-Pq0P67Ptyv3tB7Zn2ZYPIT-lPGI7AA&usqp=CAU)](https://github.com/Anuvarshini027)")
 
 def midpoint(x1, y1, x2, y2):
     x_mid = int((x1 + x2) / 2)
@@ -205,13 +215,11 @@ if file is not None:
     tgt_input = st.selectbox('Select the Target language',
                                  tuple(target_lang.keys()))
     if option == tgt_input:
-      st.write(f"The Original text is already in {option},Consider changing it.")
+      st.warning(f"The Original text is already in {option},Consider changing it.")
        
     #time.sleep(10)
     st.write('Your selected target language is :', tgt_input)
-    
    
-    
     src=dict_language[option]
     tgt=target_lang[tgt_input]
     
@@ -262,3 +270,10 @@ if file is not None:
         f=shape(inpainted)
         trans_img_lang=translated_img_other_lang(inpainted,result,fontpath,translated_text_str,f)
         st.image(trans_img_lang) 
+        
+    if(st.button("FINISH")):
+        st.info("Thank You for your Patience!")
+        st.balloons()
+
+else:
+    st.warning("No file has been chosen yet")
