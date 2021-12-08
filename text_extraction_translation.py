@@ -1,3 +1,5 @@
+import streamlit as st
+st.write("Importing...")
 import easyocr
 from PIL import ImageFont, ImageDraw, Image
 from transformers import MarianMTModel, MarianTokenizer
@@ -5,7 +7,7 @@ import cv2
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-import streamlit as st
+
 import re
 import string
 import time
@@ -65,8 +67,7 @@ def wrap_text(text, font, max_width):
             # append every word to a line while its width is shorter than the image width
         while i < len(words):
             line = ''
-            while (i < len(words) and font.getsize(line + words[0] <=
-                                                   max_width)):
+            while (i < len(words) and font.getsize(line + words[i])[0] <= max_width):
                 line = line + words[i] + " "
                 i += 1
             if not line:
@@ -167,6 +168,9 @@ file = st.file_uploader('Image file')
 dict_language={"English":"en","Korean":"ko","French":"fr","Spanish":"es","Latin":"la","Italian":"it","Romanian":"ro","Indonesian":"id","Portuguese":"pt","Japanese":"ja","Hindi":"hi",
                "Turkish":"tr",'German': 'de','Ukrainian':'uk',"Chinese":"ch_sim","Occitan":"oc","Swedish":"sv","Arabic":"ar","Dutch":"nl","Marathi":"mr",
                "Maltese":"mt","Polish":"pl","Russian":"ru","Slovenian":"sl","Thai":"th","Urdu":"ur","Vietnamese":"vi"}
+st.subheader("The Model currently supports the following languages:")
+st.info(dict_language.keys())
+
 target_lang={"English":"en","Hindi":"hi","Korean":"ko","Turkish":"tr","French":"fr","Spanish":"es","Portuguese":"pt","Italian":"it",
                   "Romanian":"ro","Indonesian":"id",
                   "Japanese":"ja","Swedish":"sv","Chinese":"zh",'Ukrainian':'uk','German': 'de','Arabic':'ar',"Dutch":"nl",
@@ -174,20 +178,22 @@ target_lang={"English":"en","Hindi":"hi","Korean":"ko","Turkish":"tr","French":"
 
 
 if file is not None:
+    my_img = Image.open(file)
+    st.image( my_img , caption='Uploaded Image.', width=None)
+    
+    img_1=np.array(my_img)
     option = st.selectbox('Select the source language',
                           tuple(dict_language.keys()))
     time.sleep(10)
     st.write('You selected:', option)
   
     lang=dict_language[option]
-   
     
-    reader = easyocr.Reader([lang],gpu=True)
-    img_1 = cv2.imread(file)
+    reader = easyocr.Reader([lang], gpu=False)
+    
+     #img_1= cv2.imread(file)
     inpainted, rect, text, result = inpaint_easyocr(img_1,reader)
-    
-    st.write("Uploaded Image")
-    st.image(img_1)
+ 
     #st.write(f"The detected text is: {text}")
     st.subheader('Inpainted Image')
     st.image(inpainted)
@@ -195,7 +201,7 @@ if file is not None:
     st.image(rect)
     text1 = preprocessing(text)
     st.write(f"The detected text is: {text1}")
-    st.info("Note:There are few combinations that the model can't convert.(Ex:french to korean and many more).In such cases, it throws an error")
+    st.info("Note:There are combinations that the model can't convert.(Ex:french to korean, swedish to hindi(combination of languages that are very rare) and many more).In such cases, it throws an error. You can change your target language accordingly.")
     tgt_input = st.selectbox('Select the Target language',
                                  tuple(target_lang.keys()))
     time.sleep(10)
