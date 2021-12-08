@@ -204,8 +204,13 @@ if file is not None:
     st.info("Note:There are combinations that the model can't convert.(Ex:french to korean, swedish to hindi(combination of languages that are very rare) and many more).In such cases, it throws an error. You can change your target language accordingly.")
     tgt_input = st.selectbox('Select the Target language',
                                  tuple(target_lang.keys()))
+     if option == tgt_input:
+       st.write(f"The Original text is already in {option},Consider changing it.")
+       
     time.sleep(10)
     st.write('Your selected target language is :', tgt_input)
+    
+   
     
     src=dict_language[option]
     tgt=target_lang[tgt_input]
