@@ -1,15 +1,14 @@
 # Text-Extraction-Translation
 
-This app has been deployed on streamlit. To view the app check the link below <br>
-https://share.streamlit.io/anuvarshini027/text-extraction-translation/main/text_extraction_translation.py
+### This app has been deployed on streamlit. To view the app check the link below <br>
+https://share.streamlit.io/anuvarshini027/text-extraction-translation/main/text_extraction_translation.py<br>
+### The corresponding .py file is text_extraction_translation.py which is Helsinski model(MarianMTModel)
 
-The corresponding .py file is text_extraction_translation.py which is Helsinski model(MarianMTModel)
+#### NOTE: There is another .py file called img_text_translation_mbart.py in which "facebook/mbart-large-50-many-to-many-mmt" model is used.But, due to the memory consumed by the model exceeded the maximum limit, deploying in cloud failed.<br>
+#### Thus, to use this app, you can download the file and the font files in the same directory and run the command given below.
 
-## There is another .py file called img_text_translation_mbat.py in which "facebook/mbart-large-50-many-to-many-mmt" model is used. <br>
-## But, due to the memory consumed by the model exceeded the maximum limit, deploying in cloud failed.<br>
-## So, to use this app, you can download the file and the font files in the same directore and run the command given below.
-
-To run the app in anaconda prompt, go to the location where the App_Higgs_Boson.py file is using the cd command and then run the following line:
+To run the app in anaconda prompt, go to the location where the img_text_translation_mbart.py file is using the cd command and then run the following line:<br>
+NOTE:Make sure that .ttf files and .py file belongs to the same directory
 ```
 streamlit run App_Higgs_Boson.py
 ```
