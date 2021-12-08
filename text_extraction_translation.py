@@ -188,7 +188,7 @@ if file is not None:
     img_1=np.array(my_img)
     option = st.selectbox('Select the source language',
                           tuple(dict_language.keys()))
-    #time.sleep(10)
+    time.sleep(10)
     st.write('You selected:', option)
   
     lang=dict_language[option]
@@ -211,7 +211,7 @@ if file is not None:
     if option == tgt_input:
       st.warning(f"The Original text is already in {option},Consider changing it.")
        
-    #time.sleep(10)
+    time.sleep(10)
     st.write('Your selected target language is :', tgt_input)
    
     src=dict_language[option]
