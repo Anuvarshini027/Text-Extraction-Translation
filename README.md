@@ -42,3 +42,9 @@ All the package requirements have been mentioned in the requirements.txt file.
 ### Translated Image
 
 ![image](https://user-images.githubusercontent.com/60288450/158811605-415bc24a-4ada-411e-a7cc-d625e425b25d.png)
+
+## Another Example: From English to French
+
+![image](https://user-images.githubusercontent.com/60288450/158812458-fccf997b-22b1-40f2-a5c1-2a1c1c3d10a7.png)
+
+### Translated Image
