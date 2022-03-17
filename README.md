@@ -48,3 +48,4 @@ All the package requirements have been mentioned in the requirements.txt file.
 ![image](https://user-images.githubusercontent.com/60288450/158812458-fccf997b-22b1-40f2-a5c1-2a1c1c3d10a7.png)
 
 ### Translated Image
+![image](https://user-images.githubusercontent.com/60288450/158812667-ab9bfd90-d1ab-4c63-a7ac-16597d5c20d9.png)
