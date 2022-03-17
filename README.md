@@ -29,5 +29,9 @@ All the package requirements have been mentioned in the requirements.txt file.
  -Translating the extracted text(using hugging-face transformers)<br>
  -Printing translated text back on Image <br>
 
+## Output
+
+![image](https://user-images.githubusercontent.com/60288450/158811169-d3545bec-52c8-488b-ad25-6b005b501571.png)
+
 
 
