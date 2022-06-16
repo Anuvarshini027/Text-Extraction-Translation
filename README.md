@@ -35,7 +35,7 @@ All the package requirements have been mentioned in the requirements.txt file.
 
 ![image](https://user-images.githubusercontent.com/60288450/158811169-d3545bec-52c8-488b-ad25-6b005b501571.png)
 
-### Inpainted Image
+### Detected Text in Image
 
 ![image](https://user-images.githubusercontent.com/60288450/158811400-a79a42c0-1dd9-4212-8f43-29b19af53154.png)
 
